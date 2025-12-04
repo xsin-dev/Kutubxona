@@ -8,7 +8,7 @@ import {
     IconMapPin,
     IconHandLoveYou,
 } from "@tabler/icons-react"
-import Logo from "../ui/logo"
+import Logo from "../ui/Logo"
 import { Link } from "react-router-dom"
 
 const Footer = () => {
@@ -83,7 +83,7 @@ const Footer = () => {
                         <div className="my-5 text-center">
                             <span className="font-serif font-semibold text-3xl mb-1 block">Kelajak</span>
                             <span className="font-serif font-semibold text-2xl mb-4">yoshlar qo'lida!</span>
-                            <div className='grid place-content-center mt-2'><IconHandLoveYou size={30}/></div>
+                            <div className='grid place-content-center mt-2'><IconHandLoveYou size={30} /></div>
                         </div>
                     </div>
 
