@@ -13,8 +13,8 @@ import { useEffect } from "react"
 const Books = () => {
 
 
-  const { searchQuery: globalQuery, setSearchQuery } = useStore()
-  const [query, setQuery] = useState(globalQuery ?? "")
+  const { searchQuery, setSearchQuery } = useStore()
+  const [query, setQuery] = useState(searchQuery ?? "")
   const [sort, setSort] = useState("title-asc")
 
   const { data: allBook } = useQuery({
@@ -28,8 +28,8 @@ const Books = () => {
   })
 
   useEffect(() => {
-    setQuery(globalQuery)
-  }, [globalQuery])
+    setQuery(searchQuery)
+  }, [searchQuery])
 
   const filteredData = allBook?.filter((book) =>
     book.name?.toLowerCase().includes(query.toLowerCase())
@@ -108,7 +108,7 @@ const Books = () => {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
               {sortData?.map((book, index) => (
                 <motion.div
-                  
+
                   key={book.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
