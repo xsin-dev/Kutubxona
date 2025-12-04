@@ -136,7 +136,7 @@ const BooksDetail = () => {
                             transition={{ duration: 0.6, delay: 0.2 }}
                             className="mt-12"
                         >
-                            <h2 className="text-2xl font-serif font-bold text-foreground mb-6">Similar Books</h2>
+                            <h2 className="text-2xl font-serif font-bold text-foreground mb-6">O'xshash kitoblar</h2>
 
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                 {similarBooks?.map((book, index) => (
