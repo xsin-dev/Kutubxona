@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "motion/react"
 import { ActionIcon, Select } from "@mantine/core"
 import { IconLanguage, IconMenu2, IconMoon, IconSun, IconX } from "@tabler/icons-react"
 import { Link, NavLink, useLocation } from "react-router-dom"
-import Logo from "../ui/logo"
+import Logo from "../ui/Logo"
 import { useStore } from "../../store/useStore"
 import { useState } from "react"
 
