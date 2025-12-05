@@ -1,5 +1,5 @@
 import { motion } from "motion/react"
-import { Select, TextInput } from "@mantine/core"
+import { Pagination, Select, TextInput } from "@mantine/core"
 import { IconSearch } from "@tabler/icons-react"
 import { useQuery } from "@tanstack/react-query"
 
@@ -9,10 +9,7 @@ import { useState } from "react"
 import { useStore } from "../../store/useStore"
 import { useEffect } from "react"
 
-
 const Books = () => {
-
-
   const { searchQuery, setSearchQuery } = useStore()
   const [query, setQuery] = useState(searchQuery ?? "")
   const [sort, setSort] = useState("title-asc")
@@ -21,8 +18,7 @@ const Books = () => {
     queryKey: ["allBook"],
     queryFn: async () => {
       const res = await API.get("/api/v1/books/books")
-      console.log(res.data);
-
+      // console.log(res.data);
       return res.data
     }
   })
@@ -40,8 +36,6 @@ const Books = () => {
     if (sort === "title-asc") return a.name.localeCompare(b.name)
     if (sort === "title-desc") return b.name.localeCompare(a.name)
   })
-
-
 
 
   return (
@@ -108,7 +102,6 @@ const Books = () => {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
               {sortData?.map((book, index) => (
                 <motion.div
-
                   key={book.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -124,7 +117,10 @@ const Books = () => {
                 <p className="text-muted-foreground">Siz qidirayotgan kitoblar topilmadi</p>
               </div>
             )}
+
+
           </motion.div>
+
         </div>
       </main>
     </div>

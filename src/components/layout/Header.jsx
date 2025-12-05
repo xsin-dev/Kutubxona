@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "motion/react"
 import { ActionIcon, Select } from "@mantine/core"
-import { IconLanguage, IconMenu2, IconMoon, IconSun, IconX } from "@tabler/icons-react"
+import { IconLanguage, IconMenu2, IconMoon, IconSun, IconUserCode, IconX } from "@tabler/icons-react"
 import { Link, NavLink, useLocation } from "react-router-dom"
 import Logo from "../ui/Logo"
 import { useStore } from "../../store/useStore"
@@ -14,7 +14,8 @@ const navLinks = [
 ]
 
 export default function Header() {
-    const { isDark, toggleTheme } = useStore()
+    const { isDark, toggleTheme, isAuth, user } = useStore()
+
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState()
 
@@ -46,6 +47,13 @@ export default function Header() {
                                 )}
                             </NavLink>
                         ))}
+
+                        {
+                            isAuth ?
+                                (<NavLink to='/login' className="text-foreground/80 hover:text-foreground transition-colors font-bold hover:bg-accent-foreground px-3.5 py-1 rounded">
+                                    Login
+                                </NavLink>) : (<p>profile</p>)
+                        }
 
                         <ActionIcon variant="subtle" size="lg" radius="xl" onClick={toggleTheme} className="text-foreground">
                             {isDark ? <IconSun size={20} /> : <IconMoon size={20} />}

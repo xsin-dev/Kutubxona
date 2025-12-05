@@ -10,5 +10,25 @@ export const useStore = create(
     // Search
     searchQuery: "",
     setSearchQuery: (query) => set({ searchQuery: query }),
+
+    // Login
+    access:null,
+    user: null,
+    isAuth: false,
+    login: (user, access) => {
+      set({
+        user,
+        access,
+        isAuth: true,
+      });
+    },
+    logout: () => {
+      set({
+        user: null,
+        access:null,
+        isAuth: false,
+      });
+      localStorage.clear();
+    },
   }))
 );
