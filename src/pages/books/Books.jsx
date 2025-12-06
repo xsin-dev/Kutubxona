@@ -1,27 +1,78 @@
 import { motion } from "motion/react"
-import { Pagination, Select, TextInput } from "@mantine/core"
-import { IconSearch } from "@tabler/icons-react"
-import { useQuery } from "@tanstack/react-query"
+import { Flex, FocusTrap, Modal, Select, TextInput } from "@mantine/core"
+import { IconBook, IconBook2, IconPlus, IconSearch } from "@tabler/icons-react"
+import { useMutation, useQuery } from "@tanstack/react-query"
 
 import { API } from "../../api/API"
 import BookCard from "../../components/ui/BookCard"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { useStore } from "../../store/useStore"
 import { useEffect } from "react"
+
+import { Menu, Button } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { queryClient } from "../../main"
+
 
 const Books = () => {
   const { searchQuery, setSearchQuery } = useStore()
   const [query, setQuery] = useState(searchQuery ?? "")
   const [sort, setSort] = useState("title-asc")
 
+  const { isAuth } = useStore()
+
+  const [opened, { open, close }] = useDisclosure(false);
+
+  const bookRef = useRef()
+  const authorRef = useRef()
+  const publisherRef = useRef()
+  const bookCountRef = useRef()
+
+
   const { data: allBook } = useQuery({
     queryKey: ["allBook"],
     queryFn: async () => {
       const res = await API.get("/api/v1/books/books")
-      // console.log(res.data);
+      console.log(res.data);
       return res.data
     }
   })
+
+  const { mutate: createBook } = useMutation({
+    mutationKey: ["createBook"],
+    mutationFn: async (body) => {
+      const res = await API.post("/api/v1/books/books/", body)
+      console.log(res);
+
+      return res
+    }
+  })
+
+
+  const handleCreateBook = (e) => {
+    e.preventDefault()
+    const newBook = {
+      name: bookRef.current.value,
+      author: authorRef.current.value,
+      publisher: publisherRef.current.value,
+      quantity_in_library: bookCountRef.current.value,
+    }
+
+    createBook(newBook, {
+      onSuccess: (res) => {
+        console.log(res)
+        // alert("okey")
+        close()
+        // e.target.reset()
+        queryClient.invalidateQueries({
+          queryKey: ["allBook"]
+        })
+      },
+      onError: (err) => {
+        alert(err.message)
+      }
+    })
+  }
 
   useEffect(() => {
     setQuery(searchQuery)
@@ -117,12 +168,61 @@ const Books = () => {
                 <p className="text-muted-foreground">Siz qidirayotgan kitoblar topilmadi</p>
               </div>
             )}
-
-
           </motion.div>
-
         </div>
       </main>
+      {
+        isAuth &&
+        <div>
+          <div className="fixed bottom-8 right-8 z-1">
+            <Menu width={250} shadow="md">
+              <Menu.Target>
+                <Button>
+                  <IconPlus size={15} />
+                  <span className="ml-1"> Kitob qo'shish</span>
+                </Button>
+              </Menu.Target>
+
+              <Menu.Dropdown>
+                <Menu.Item>
+                  {" "}
+                  <Flex align="center" gap="xs" variant="default" onClick={open}>
+                    <IconBook />
+                    Bitta kitob qo'shish
+                  </Flex>
+                </Menu.Item>
+                <Menu.Item>
+                  {" "}
+                  <Flex align="center" gap="xs">
+                    <IconBook2 />
+                    Bir nechta kitob qo'shish
+                  </Flex>
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          </div>
+          <Modal opened={opened} onClose={close} title="Kitob qo'shish">
+            <form onSubmit={handleCreateBook}>
+              <FocusTrap.InitialFocus />
+              <TextInput ref={bookRef} label="Kitob nomi" placeholder="Kitob nomi" mt="md" />
+              <TextInput ref={authorRef} label="Muallif" placeholder="Muallif" mt="md" />
+              <TextInput ref={publisherRef} label="Nashriyot" placeholder="Nashriyot" mt="md" />
+              <TextInput
+                type="Number"
+                ref={bookCountRef}
+                data-autofocus
+                label="Kitoblar soni"
+                placeholder="Kitoblar soni"
+                mt="md"
+              />
+              <div className="mt-4 ml-[180px] flex gap-3">
+                <Button onClick={close} variant="outline">Bekor qilish</Button>
+                <Button type="submit">Qo'shish</Button>
+              </div>
+            </form>
+          </Modal>
+        </div>
+      }
     </div>
   )
 }

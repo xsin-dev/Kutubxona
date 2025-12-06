@@ -49,10 +49,12 @@ export default function Header() {
                         ))}
 
                         {
-                            isAuth ?
+                            !isAuth ?
                                 (<NavLink to='/login' className="text-foreground/80 hover:text-foreground transition-colors font-bold hover:bg-accent-foreground px-3.5 py-1 rounded">
                                     Login
-                                </NavLink>) : (<p>profile</p>)
+                                </NavLink>) : (<NavLink to='/profile' className="text-foreground/80 hover:text-foreground transition-colors font-bold hover:bg-accent-foreground px-3.5 py-1 rounded">
+                                    Profile
+                                </NavLink>)
                         }
 
                         <ActionIcon variant="subtle" size="lg" radius="xl" onClick={toggleTheme} className="text-foreground">
